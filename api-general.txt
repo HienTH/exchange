@@ -1,0 +1,3 @@
+1.Danh sach bang gia coin
+2.Danh sach giao dich dang cho
+3.Xem bang gia chi tiet coin
