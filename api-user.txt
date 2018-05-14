@@ -213,4 +213,11 @@ True:
     ]
 }
 
+10. Khop lenh
+POST
+/users/khoplenh/
+True:
+
+False:
+
 

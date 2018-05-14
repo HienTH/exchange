@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th5 14, 2018 lúc 02:36 PM
+-- Thời gian đã tạo: Th5 15, 2018 lúc 01:53 AM
 -- Phiên bản máy phục vụ: 5.7.22-0ubuntu0.16.04.1
 -- Phiên bản PHP: 7.0.28-0ubuntu0.16.04.1
 
@@ -271,8 +271,18 @@ CREATE TABLE `general_chenhlech` (
 --
 
 INSERT INTO `general_chenhlech` (`id`, `value`, `fromtypecoin_id`, `totypecoin_id`) VALUES
-(1, 12, 2, 3),
-(3, 1, 2, 4);
+(1, 0.01, 1, 2),
+(2, 0.01, 1, 3),
+(3, 0.01, 1, 4),
+(4, 0.01, 2, 1),
+(5, 0.01, 2, 3),
+(6, 0.01, 2, 4),
+(7, 0.01, 3, 1),
+(8, 0.01, 3, 2),
+(9, 0.01, 3, 4),
+(10, 0.01, 4, 1),
+(11, 0.01, 4, 2),
+(12, 0.01, 4, 3);
 
 -- --------------------------------------------------------
 
@@ -663,7 +673,15 @@ INSERT INTO `general_coin` (`id`, `price`, `time`, `typecoin_id`) VALUES
 (373, 197961430.35, '2018-05-14 14:34:55.000000', 1),
 (374, 16537697.89, '2018-05-14 14:34:55.000000', 2),
 (375, 4717420.89, '2018-05-14 14:34:55.000000', 3),
-(376, 23746.97, '2018-05-14 14:34:55.000000', 4);
+(376, 23746.97, '2018-05-14 14:34:55.000000', 4),
+(379, 194059128.88, '2018-05-14 16:23:55.000000', 1),
+(380, 16337838.06, '2018-05-14 16:23:55.000000', 2),
+(381, 4610844.9, '2018-05-14 16:23:55.000000', 3),
+(382, 23110.04, '2018-05-14 16:23:55.000000', 4),
+(383, 194059128.88, '2018-05-14 16:24:06.000000', 1),
+(384, 16339778.65, '2018-05-14 16:24:06.000000', 2),
+(385, 4612785.49, '2018-05-14 16:24:06.000000', 3),
+(386, 23110.04, '2018-05-14 16:24:06.000000', 4);
 
 -- --------------------------------------------------------
 
@@ -687,17 +705,17 @@ CREATE TABLE `general_exchange` (
 --
 
 INSERT INTO `general_exchange` (`id`, `fromcoin`, `tocoin`, `time`, `fromtypecoin_id`, `totypecoin_id`, `userid_id`, `status`) VALUES
-(1, 1, 1, '2018-05-13 16:17:39.000000', 1, 2, '6314826F0A', 0),
+(1, 1, 10, '2018-05-13 16:17:39.000000', 1, 2, '6314826F0A', 1),
 (2, 11, 10, '2018-05-13 16:18:51.000000', 4, 3, '6314826F0A', 0),
 (3, 11, 100, '2018-05-13 16:18:59.000000', 1, 3, '6314826F0A', 0),
-(4, 10, 100, '2018-05-13 16:19:08.000000', 2, 3, '6314826F0A', 0),
-(5, 10, 100, '2018-05-13 16:19:56.000000', 3, 2, '5248CB4C2B', 0),
+(4, 10, 100, '2018-05-13 16:19:08.000000', 2, 3, '6314826F0A', 1),
+(5, 150, 10, '2018-05-13 16:19:56.000000', 3, 2, '5248CB4C2B', 1),
 (6, 15, 16, '2018-05-13 16:20:05.000000', 3, 1, '5248CB4C2B', 0),
 (7, 55, 16, '2018-05-13 16:20:10.000000', 3, 4, '5248CB4C2B', 0),
 (8, 55, 16, '2018-05-13 16:24:14.000000', 1, 4, '5248CB4C2B', 0),
-(10, 5, 16, '2018-05-13 18:44:16.000000', 2, 4, '5248CB4C2B', 0),
+(10, 15, 1, '2018-05-13 18:44:16.000000', 2, 1, '5248CB4C2B', 1),
 (11, 5, 16, '2018-05-13 18:48:41.000000', 2, 4, '5248CB4C2B', 0),
-(12, 50, 16, '2018-05-13 18:48:50.000000', 2, 4, '5248CB4C2B', 0),
+(12, 50, 16, '2018-05-13 18:48:50.000000', 2, 1, '5248CB4C2B', 0),
 (13, 50, 6, '2018-05-13 18:49:26.000000', 2, 4, '5248CB4C2B', 0);
 
 -- --------------------------------------------------------
@@ -712,6 +730,14 @@ CREATE TABLE `general_matchexchange` (
   `fromexchange_id` int(11) NOT NULL,
   `toexchange_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Đang đổ dữ liệu cho bảng `general_matchexchange`
+--
+
+INSERT INTO `general_matchexchange` (`id`, `time`, `fromexchange_id`, `toexchange_id`) VALUES
+(1, '2018-05-15 01:50:07.000000', 1, 10),
+(2, '2018-05-15 01:50:07.000000', 4, 5);
 
 -- --------------------------------------------------------
 
@@ -777,13 +803,13 @@ CREATE TABLE `general_usercoin` (
 --
 
 INSERT INTO `general_usercoin` (`id`, `value`, `coinid_id`, `userid_id`) VALUES
-(1, 100, 1, '5248CB4C2B'),
-(2, 150, 2, '5248CB4C2B'),
-(3, 120, 3, '5248CB4C2B'),
+(1, 104.95, 1, '5248CB4C2B'),
+(2, 114.6, 2, '5248CB4C2B'),
+(3, -480, 3, '5248CB4C2B'),
 (4, 90, 4, '5248CB4C2B'),
-(5, 70, 1, '6314826F0A'),
-(6, 230, 2, '6314826F0A'),
-(7, 150, 3, '6314826F0A'),
+(5, 64, 1, '6314826F0A'),
+(6, 239.5, 2, '6314826F0A'),
+(7, 546, 3, '6314826F0A'),
 (8, 180, 4, '6314826F0A'),
 (9, 30, 1, '8840716884'),
 (11, 300, 3, '8840716884'),
@@ -791,7 +817,11 @@ INSERT INTO `general_usercoin` (`id`, `value`, `coinid_id`, `userid_id`) VALUES
 (13, 100, 1, 'CD879BBD51'),
 (14, 150, 2, 'CD879BBD51'),
 (15, 50, 3, 'CD879BBD51'),
-(16, 130, 4, 'CD879BBD51');
+(16, 130, 4, 'CD879BBD51'),
+(17, 0.05, 1, 'D4AD333121'),
+(18, 0.9, 2, 'D4AD333121'),
+(19, 4, 3, 'D4AD333121'),
+(20, 0, 4, 'D4AD333121');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -977,12 +1007,12 @@ ALTER TABLE `django_migrations`
 -- AUTO_INCREMENT cho bảng `general_chenhlech`
 --
 ALTER TABLE `general_chenhlech`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT cho bảng `general_coin`
 --
 ALTER TABLE `general_coin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=377;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=387;
 --
 -- AUTO_INCREMENT cho bảng `general_exchange`
 --
@@ -992,7 +1022,7 @@ ALTER TABLE `general_exchange`
 -- AUTO_INCREMENT cho bảng `general_matchexchange`
 --
 ALTER TABLE `general_matchexchange`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT cho bảng `general_typecoin`
 --
@@ -1002,7 +1032,7 @@ ALTER TABLE `general_typecoin`
 -- AUTO_INCREMENT cho bảng `general_usercoin`
 --
 ALTER TABLE `general_usercoin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- Các ràng buộc cho các bảng đã đổ
 --

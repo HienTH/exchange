@@ -57,11 +57,15 @@ def suagiachenhlech(request, current_user):
 	if request.method == 'PUT':
 		data=json.loads(json.dumps(request.data))
 		
-		if 'fromtypecoin' not in data or 'id' not in data or 'totypecoin' not in data or 'value' not in data:
+		if 'id' not in data or 'value' not in data:
 			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 
-		if data['fromtypecoin']	== data['totypecoin']:
-			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
+		lech = ChenhLech.objects.filter(id=data['id'])
+		data['fromtypecoin'] = lech[0].fromtypecoin.id
+		data['totypecoin'] = lech[0].totypecoin.id
+
+		if data['value'] >= 0.1:
+			data['value'] = data['value']/100
 
 		serializer = ChenhLechSerializer(data=data)
 		if serializer.is_valid():
@@ -70,7 +74,7 @@ def suagiachenhlech(request, current_user):
 			except:
 				return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 					
-			return JsonResponse({'data': 'OK', 'status': 'success'})
+			return JsonResponse({'status': 'success'})
 		else:
 			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 
@@ -78,7 +82,7 @@ def suagiachenhlech(request, current_user):
 @views.token_required_admin
 def danhsachdagiaodich(request, current_admin):
 	if request.META['REQUEST_METHOD'] == 'GET':
-		danhsach = Exchange.objects.all().order_by('-time')
+		danhsach = Exchange.objects.filter(status=True).order_by('-time')
 		serializer = ExchangeSerializer(danhsach, many=True)
 		return JsonResponse({'data': serializer.data, 'status': 'success'})
 
