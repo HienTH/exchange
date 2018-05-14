@@ -49,6 +49,7 @@ def xemdanhsachgiaodich(request):
 def capnhatbanggiacoin(request):
 	if request.method == 'POST':
 		data=json.loads(json.dumps(request.data))
+
 		response = urllib2.urlopen('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,XMR,USDT&tsyms=VND')
 		price = json.loads(response.read())
 
