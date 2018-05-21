@@ -18,6 +18,7 @@ from general.serializers import UserSerializer, CoinSerializer, UserCoinSerializ
 import json
 import random
 from login import views
+import re
 
 # Create your views here.
 @api_view(['GET'])
@@ -26,7 +27,36 @@ def xemgiachenhlech(request, current_admin):
 	if request.META['REQUEST_METHOD'] == 'GET':
 		giachenhlech = ChenhLech.objects.all()
 		serializer = ChenhLechSerializer(giachenhlech, many=True)
-		return JsonResponse({'data': serializer.data, 'status': 'success'})
+		data = []
+		for i in serializer.data:
+			k = {}
+			k['id'] = i['id']
+			k['namefromtypecoin'] = str(TypeCoin.objects.get(id=i['fromtypecoin']).name)
+			k['nametotypecoin'] = str(TypeCoin.objects.get(id=i['totypecoin']).name)
+			k['value'] = i['value']
+			data.append(k)
+
+		return JsonResponse({'data': data, 'status': 'success'})
+
+@api_view(['POST'])
+@views.token_required_admin
+def chitietgiachenhlech(request, current_admin):
+	if request.method == 'POST':
+		data=json.loads(json.dumps(request.data))
+		try:
+			giachenhlech = ChenhLech.objects.get(id=data['id'])
+		except:
+			return JsonResponse({'message': "Du lieu khong hop le", 'status': 'error'})
+
+		serializer = ChenhLechSerializer(giachenhlech)
+		i = serializer.data
+		k = {}
+		k['id'] = i['id']
+		k['namefromtypecoin'] = str(TypeCoin.objects.get(id=i['fromtypecoin']).name)
+		k['nametotypecoin'] = str(TypeCoin.objects.get(id=i['totypecoin']).name)
+		k['value'] = i['value']
+
+		return JsonResponse({'data': k, 'status': 'success'})
 
 @api_view(['POST'])
 @views.token_required_admin
@@ -60,14 +90,22 @@ def suagiachenhlech(request, current_user):
 		if 'id' not in data or 'value' not in data:
 			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 
-		lech = ChenhLech.objects.filter(id=data['id'])
-		data['fromtypecoin'] = lech[0].fromtypecoin.id
-		data['totypecoin'] = lech[0].totypecoin.id
+		try:
+			lech = ChenhLech.objects.get(id=data['id'])
+		except:
+			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 
-		if data['value'] >= 0.1:
-			data['value'] = data['value']/100
+		data['fromtypecoin'] = lech.fromtypecoin.id
+		data['totypecoin'] = lech.totypecoin.id
 
-		serializer = ChenhLechSerializer(data=data)
+		match = re.match(r'^\d+\.\d+$', data['value'])
+		if not match:
+			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
+
+		if float(data['value']) >= 0.1:
+			data['value'] = str(float(data['value'])/100)
+
+		serializer = ChenhLechSerializer(lech, data=data)
 		if serializer.is_valid():
 			try:
 				serializer.save()
@@ -80,9 +118,86 @@ def suagiachenhlech(request, current_user):
 
 @api_view(['GET'])
 @views.token_required_admin
-def danhsachdagiaodich(request, current_admin):
+def danhsachgiaodich(request, current_admin):
 	if request.META['REQUEST_METHOD'] == 'GET':
-		danhsach = Exchange.objects.filter(status=True).order_by('-time')
+		danhsach = Exchange.objects.all().order_by('-time')
 		serializer = ExchangeSerializer(danhsach, many=True)
+		data = []
+		for i in serializer.data:
+			k = {}
+			k['id'] = i['id']
+			k['fromcoin'] = i['fromcoin']
+			k['namefromtypecoin'] = str(TypeCoin.objects.get(id=i['fromtypecoin']).name)
+			k['tocoin'] = i['tocoin']
+			k['nametotypecoin'] = str(TypeCoin.objects.get(id=i['totypecoin']).name)
+			k['userid'] = i['userid']
+			k['time'] = i['time']
+			k['status'] = i['status']
+			data.append(k)
+
+		return JsonResponse({'data': data, 'status': 'success'})
+
+@api_view(['GET'])
+@views.token_required_admin
+def danhsachgiaodichdangcho(request, current_admin):
+	if request.META['REQUEST_METHOD'] == 'GET':
+		danhsach = Exchange.objects.filter(status=False).order_by('-time')
+		serializer = ExchangeSerializer(danhsach, many=True)
+		data = []
+		for i in serializer.data:
+			k = {}
+			k['id'] = i['id']
+			k['fromcoin'] = i['fromcoin']
+			k['namefromtypecoin'] = str(TypeCoin.objects.get(id=i['fromtypecoin']).name)
+			k['tocoin'] = i['tocoin']
+			k['nametotypecoin'] = str(TypeCoin.objects.get(id=i['totypecoin']).name)
+			k['userid'] = i['userid']
+			k['time'] = i['time']
+			k['status'] = i['status']
+			data.append(k)
+		return JsonResponse({'data': data, 'status': 'success'})
+
+@api_view(['GET'])
+@views.token_required_admin
+def danhsachgiaodichdakhop(request, current_admin):
+	if request.META['REQUEST_METHOD'] == 'GET':
+		danhsach = MatchExchange.objects.all().order_by('-time')
+		serializer = MatchExchangeSerializer(danhsach, many=True)
 		return JsonResponse({'data': serializer.data, 'status': 'success'})
 
+@api_view(['GET'])
+@views.token_required_admin
+def infoadmin(request, current_admin):
+	if request.META['REQUEST_METHOD'] == 'GET':
+		admin = User.objects.get(id='D4AD333121')
+		data = {}
+		data['id'] = 'D4AD333121'
+		data['name'] = admin.name
+
+		coinadmin = UserCoin.objects.filter(userid='D4AD333121')
+		data['BTC'] = coinadmin[0].value
+		data['ETH'] = coinadmin[1].value
+		data['XMR'] = coinadmin[2].value
+		data['USDT'] = coinadmin[3].value
+
+		return JsonResponse({'data': data, 'status': 'success'})
+
+@api_view(['GET'])
+@views.token_required_admin
+def infoalluser(request, current_admin):
+	if request.META['REQUEST_METHOD'] == 'GET':
+		user = User.objects.all()
+		serializer = UserSerializer(user, many=True)
+		d = []
+		for i in serializer.data:
+			data = {}
+			data['id'] = i['id']
+			data['name'] = i['name']
+			coinadmin = UserCoin.objects.filter(userid=i['id'])
+			data['BTC'] = coinadmin[0].value
+			data['ETH'] = coinadmin[1].value
+			data['XMR'] = coinadmin[2].value
+			data['USDT'] = coinadmin[3].value
+			d.append(data)
+
+		return JsonResponse({'data': d})
