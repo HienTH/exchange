@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'login',
     'manager',
     'users',
+    'corsheaders',
     'rest_framework'
 ]
 

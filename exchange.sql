@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Máy chủ: localhost
--- Thời gian đã tạo: Th5 15, 2018 lúc 01:53 AM
+-- Thời gian đã tạo: Th5 21, 2018 lúc 03:34 PM
 -- Phiên bản máy phục vụ: 5.7.22-0ubuntu0.16.04.1
--- Phiên bản PHP: 7.0.28-0ubuntu0.16.04.1
+-- Phiên bản PHP: 7.0.30-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -805,13 +805,14 @@ CREATE TABLE `general_usercoin` (
 INSERT INTO `general_usercoin` (`id`, `value`, `coinid_id`, `userid_id`) VALUES
 (1, 104.95, 1, '5248CB4C2B'),
 (2, 114.6, 2, '5248CB4C2B'),
-(3, -480, 3, '5248CB4C2B'),
+(3, 480, 3, '5248CB4C2B'),
 (4, 90, 4, '5248CB4C2B'),
 (5, 64, 1, '6314826F0A'),
 (6, 239.5, 2, '6314826F0A'),
 (7, 546, 3, '6314826F0A'),
 (8, 180, 4, '6314826F0A'),
 (9, 30, 1, '8840716884'),
+(10, 20, 2, '8840716884'),
 (11, 300, 3, '8840716884'),
 (12, 170, 4, '8840716884'),
 (13, 100, 1, 'CD879BBD51'),
@@ -1007,7 +1008,7 @@ ALTER TABLE `django_migrations`
 -- AUTO_INCREMENT cho bảng `general_chenhlech`
 --
 ALTER TABLE `general_chenhlech`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT cho bảng `general_coin`
 --

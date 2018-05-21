@@ -193,7 +193,7 @@ def infoalluser(request, current_admin):
 			data = {}
 			data['id'] = i['id']
 			data['name'] = i['name']
-			coinadmin = UserCoin.objects.filter(userid=i['id'])
+			coinadmin = UserCoin.objects.filter(userid=i['id']).order_by('id')
 			data['BTC'] = coinadmin[0].value
 			data['ETH'] = coinadmin[1].value
 			data['XMR'] = coinadmin[2].value
