@@ -81,9 +81,20 @@ def datlenh(request, current_user):
 			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 
 		#kiem tra fromcoin
+		#coin con lai o tai khoan
 		usrfrom = UserCoin.objects.filter(userid=current_user.id, coinid=data['fromtypecoin'])
-		if float(data['fromcoin']) > float(usrfrom[0].value):
-			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
+		#coin da dung de dat lenh
+		coinfalse = Exchange.objects.filter(userid=current_user.id, fromtypecoin=data['fromtypecoin'], status=0)
+		total = 0
+		for i in coinfalse:
+			t = i.fromcoin
+			total = total + t
+
+		#import pdb; pdb.set_trace();
+		#kiem tra dieu kien
+		coin = float(usrfrom[0].value - total)
+		if float(data['fromcoin']) > coin:
+			return JsonResponse({'message': 'Du lieu khong hop le nhe', 'status': 'error'})
 
 		data['time'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 		data['userid'] = current_user.id
