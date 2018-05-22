@@ -77,7 +77,7 @@ def datlenh(request, current_user):
 		if 'fromtypecoin' not in data or 'fromcoin' not in data or 'totypecoin' not in data or 'tocoin' not in data:
 			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 
-		if data['fromtypecoin']	== data['totypecoin']:
+		if data['fromtypecoin']	== data['totypecoin'] or data['fromcoin'] == 0 or data['tocoin'] == 0:
 			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 
 		#kiem tra fromcoin
@@ -104,6 +104,26 @@ def datlenh(request, current_user):
 			serializer.save()
 
 			return JsonResponse({'data': 'OK', 'status': 'success'})
+		else:
+			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
+
+@api_view(['DELETE'])
+@views.token_required_user
+def xoalenh(request, current_user):
+	if request.method == 'DELETE':
+		data=json.loads(json.dumps(request.data))
+		if 'id' not in data:
+			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
+
+		#kiem tra lenh
+		try:
+			lenh = Exchange.objects.get(id=data['id'], status=False)
+		except:
+			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
+
+		if lenh.userid.id == current_user.id:
+			lenh.delete()
+			return JsonResponse({'status': 'success'})
 		else:
 			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 
@@ -213,7 +233,7 @@ def chuyenexchange(exchangeid, tienlai, loaitienlai):
 	serializer = ExchangeSerializer(ex[0], data=data)
 	if serializer.is_valid():
 		serializer.save()
-#	import pdb; pdb.set_trace();
+
 	#xac dinh gia chenh lech
 	chenhlech = ChenhLech.objects.filter(fromtypecoin=ex[0].fromtypecoin.id, totypecoin=ex[0].totypecoin.id)
 	giachenhlech = chenhlech[0].value
@@ -340,12 +360,12 @@ def khoplenh(request, current_user):
 				lai = 0
 				if t1['id'] > t['id'] and t['userid'] != t1['userid'] and t['fromtypecoin'] == t1['totypecoin'] and t['totypecoin'] == t1['fromtypecoin'] and ((t['fromcoin'] == t1['tocoin'] and t['tocoin'] < t1['fromcoin']) or (t['tocoin'] == t1['fromcoin'] and t1['tocoin'] < t['fromcoin'])):
 					if t['tocoin'] < t1['fromcoin']:
-						lai = (t1['fromcoin'] - t['tocoin'])*giatien(t['fromtypecoin'], giahientai)
+						lai = (t1['fromcoin'] - t['tocoin']) * giatien(t['fromtypecoin'], giahientai)
 						tienlai = t1['fromcoin'] - t['tocoin']
 						loaitienlai = t['totypecoin']
 
 					if t1['tocoin'] < t['fromcoin']:
-						lai = (t['fromcoin'] - t1['tocoin'])*giatien(t['fromtypecoin'], giahientai)
+						lai = (t['fromcoin'] - t1['tocoin']) * giatien(t['fromtypecoin'], giahientai)
 						tienlai = t['fromcoin'] - t1['tocoin']
 						loaitienlai = t['fromtypecoin']
 
