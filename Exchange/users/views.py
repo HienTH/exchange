@@ -41,46 +41,47 @@ def register(request):
 		hashed_password = generate_password_hash(data['password'], method='sha256')
 		data['password']=hashed_password
 		data['rank'] = 0
-
+		ID = data['id']
+		#import pdb; pdb.set_trace();
 		serializer = UserSerializer(data=data)
 		if serializer.is_valid():
 			serializer.save()
 
 			data = {}
-			data['userid'] = data['id']
+			data['userid'] = ID
 			data['value'] = 0
 			data['coinid'] = 1
-			serializer = UserSerializer(data=data)
+			serializer = UserCoinSerializer(data=data)
 			if serializer.is_valid():
 				serializer.save()
 
 			data = {}
-			data['userid'] = data['id']
+			data['userid'] = ID
 			data['value'] = 0
 			data['coinid'] = 2
-			serializer = UserSerializer(data=data)
+			serializer = UserCoinSerializer(data=data)
 			if serializer.is_valid():
 				serializer.save()			
 
 			data = {}
-			data['userid'] = data['id']
+			data['userid'] = ID
 			data['value'] = 0
 			data['coinid'] = 3
-			serializer = UserSerializer(data=data)
+			serializer = UserCoinSerializer(data=data)
 			if serializer.is_valid():
 				serializer.save()
 
 			data = {}
-			data['userid'] = data['id']
+			data['userid'] = ID
 			data['value'] = 0
 			data['coinid'] = 4
-			serializer = UserSerializer(data=data)
+			serializer = UserCoinSerializer(data=data)
 			if serializer.is_valid():
 				serializer.save()
-				
+
 			return JsonResponse({'data': 'OK', 'status': 'success'})
 		else:
-			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
+			return JsonResponse({'message': 'Du lieu khong hop le nhe', 'status': 'error'})
 
 @api_view(['GET'])
 @views.token_required_user
