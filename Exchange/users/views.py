@@ -46,6 +46,38 @@ def register(request):
 		if serializer.is_valid():
 			serializer.save()
 
+			data = {}
+			data['userid'] = data['id']
+			data['value'] = 0
+			data['coinid'] = 1
+			serializer = UserSerializer(data=data)
+			if serializer.is_valid():
+				serializer.save()
+
+			data = {}
+			data['userid'] = data['id']
+			data['value'] = 0
+			data['coinid'] = 2
+			serializer = UserSerializer(data=data)
+			if serializer.is_valid():
+				serializer.save()			
+
+			data = {}
+			data['userid'] = data['id']
+			data['value'] = 0
+			data['coinid'] = 3
+			serializer = UserSerializer(data=data)
+			if serializer.is_valid():
+				serializer.save()
+
+			data = {}
+			data['userid'] = data['id']
+			data['value'] = 0
+			data['coinid'] = 4
+			serializer = UserSerializer(data=data)
+			if serializer.is_valid():
+				serializer.save()
+				
 			return JsonResponse({'data': 'OK', 'status': 'success'})
 		else:
 			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
@@ -77,7 +109,7 @@ def datlenh(request, current_user):
 		if 'fromtypecoin' not in data or 'fromcoin' not in data or 'totypecoin' not in data or 'tocoin' not in data:
 			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 
-		if data['fromtypecoin']	== data['totypecoin'] or data['fromcoin'] == 0 or data['tocoin'] == 0:
+		if data['fromtypecoin']	== data['totypecoin'] or data['fromcoin'] == 0 or data['tocoin'] == 0 or data['fromcoin'] == "0" or data['tocoin'] == "0":
 			return JsonResponse({'message': 'Du lieu khong hop le', 'status': 'error'})
 
 		#kiem tra fromcoin
